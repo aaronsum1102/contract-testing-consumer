@@ -7,7 +7,7 @@ on:
 
 env:
   COMMIT_SHA: ${{ github.sha }}
-  PACT_CLI: docker run --rm -v $PWD:$PWD -e ${{secrets.PACT_BROKER_BASE_URL}} -e ${{secrets.PACT_BROKER_TOKEN}} pactfoundation/pact-cli:latest
+  PACT_CLI: docker run --rm -v ${PWD}:${PWD} -e ${{secrets.PACT_BROKER_BASE_URL}} -e ${{secrets.PACT_BROKER_TOKEN}} pactfoundation/pact-cli:latest
 
 jobs:
   test:
@@ -24,7 +24,7 @@ jobs:
       - name: Test
         run: yarn test
       - name: Publish Pact
-        run: $PACT_CLI publish $PWD/pacts --consumer-app-version $COMMIT_SHA -tag dev
+        run: $PACT_CLI publish ${PWD}/pacts --consumer-app-version $COMMIT_SHA -tag dev
 
   can-i-deploy:
     runs-on: ubuntu-latest
