@@ -6,8 +6,9 @@ on:
       - master
 
 env:
-  COMMIT_SHA: ${{ github.sha }}
-  PACT_CLI: docker run --rm -v ${PWD}:${PWD} -e ${{secrets.PACT_BROKER_BASE_URL}} -e ${{secrets.PACT_BROKER_TOKEN}} pactfoundation/pact-cli:latest
+  PACT_BROKER_BASE_URL: ${{secrets.PACT_BROKER_BASE_URL}}
+  PACT_BROKER_TOKEN: ${{secrets.PACT_BROKER_TOKEN}}
+  COMMIT_HASH: ${{ github.sha }}
 
 jobs:
   test:
@@ -24,7 +25,7 @@ jobs:
       - name: Test
         run: yarn test
       - name: Publish Pact
-        run: $PACT_CLI publish ${PWD}/pacts --consumer-app-version $COMMIT_SHA -tag dev
+        run: DEPLOY_TARGET=dev make publish_pacts
 
   can-i-deploy:
     runs-on: ubuntu-latest
@@ -33,7 +34,7 @@ jobs:
       - uses: actions/checkout@v2
       - run: docker pull pactfoundation/pact-cli:latest
       - name: Can I deploy?
-        run: $PACT_CLI broker can-i-deploy --pacticipant $PACTICIPANT --version $COMMIT_SHA --to dev --retry-while-unknown 0 --retry-interval 10
+        run: DEPLOY_TARGET=dev make can_i_deploy
         env:
           PACTICIPANT: person-consumer
 
