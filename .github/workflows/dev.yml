@@ -5,7 +5,38 @@ on:
     branches:
       - master
 
+env:
+  COMMIT_SHA: ${{ github.sha }}
+  PACT_CLI: docker run --rm -v $PWD:$PWD -e ${{PACT_BROKER_BASE_URL}} -e ${{PACT_BROKER_TOKEN}} pactfoundation/pact-cli:latest
+
 jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Setup Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+      - name: Test
+        run: yarn test
+      - name: Publish Pact
+        run: $PACT_CLI publish $PWD/pacts --consumer-app-version ${{ github.sha }} -tag dev
+
+  can-i-deploy:
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+      - uses: actions/checkout@v2
+      - run: docker pull pactfoundation/pact-cli:latest
+      - name: Can I deploy?
+        run: $PACT_CLI broker can-i-deploy --pacticipant $PACTICIPANT --version ${{ github.sha }} --to dev --retry-while-unknown 0 --retry-interval 10
+        env:
+          PACTICIPANT: person-consumer
+
   release:
     name: Release
     runs-on: ubuntu-18.04

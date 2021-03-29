@@ -1,0 +1,36 @@
+{
+  "consumer": {
+    "name": "person-consumer"
+  },
+  "provider": {
+    "name": "person-provider"
+  },
+  "messages": [
+    {
+      "description": "A request for person",
+      "providerStates": [
+
+      ],
+      "contents": {
+        "firstName": {
+          "contents": "Test",
+          "json_class": "Pact::SomethingLike"
+        },
+        "lastName": {
+          "contents": "Testsson",
+          "json_class": "Pact::SomethingLike"
+        }
+      },
+      "matchingRules": {
+      },
+      "metaData": {
+        "content-type": "application/json"
+      }
+    }
+  ],
+  "metadata": {
+    "pactSpecification": {
+      "version": "3.0.0"
+    }
+  }
+}
