@@ -29,7 +29,7 @@ jobs:
         run: docker pull pactfoundation/pact-cli:latest
       - name: Publish Pact
         run: >
-          docker run pactfoundation/pact-cli:latest
+          docker run --rm  -v $PWD:PWD pactfoundation/pact-cli:latest
           publish $PWD/pacts 
           --consumer-app-version ${{ github.sha }} 
           --tag ${APP_ENVIRONMENT}
