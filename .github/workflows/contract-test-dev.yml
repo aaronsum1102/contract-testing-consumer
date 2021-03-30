@@ -2,6 +2,7 @@ name: contract-test-dev
 
 on:
   pull_request:
+    types: [opened, synchronize]
     branches:
       - dev
 
@@ -29,7 +30,7 @@ jobs:
         run: docker pull pactfoundation/pact-cli:latest
       - name: Publish Pact
         run: >
-          docker run --rm  -v $PWD:PWD pactfoundation/pact-cli:latest
+          docker run --rm  -v $PWD:$PWD pactfoundation/pact-cli:latest
           publish $PWD/pacts 
           --consumer-app-version ${{ github.sha }} 
           --tag ${APP_ENVIRONMENT}
