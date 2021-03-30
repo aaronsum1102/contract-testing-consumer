@@ -1,14 +1,17 @@
-name: dev
+name: contract-test-prod
 
 on:
-  push:
+  pull_request:
+    types: [opened, synchronize]
     branches:
       - master
+  workflow_dispatch:
 
 env:
   PACT_BROKER_BASE_URL: ${{secrets.PACT_BROKER_BASE_URL}}
   PACT_BROKER_TOKEN: ${{secrets.PACT_BROKER_TOKEN}}
-  COMMIT_HASH: ${{ github.sha }}
+  PACTICIPANT: person-consumer
+  APP_ENVIRONMENT: master
 
 jobs:
   test:
@@ -24,19 +27,35 @@ jobs:
         run: yarn install --frozen-lockfile
       - name: Test
         run: yarn test
+      - name: Setup pact-cli
+        run: docker pull pactfoundation/pact-cli:latest
       - name: Publish Pact
-        run: DEPLOY_TARGET=dev make publish_pacts
+        run: >
+          docker run --rm  -v $PWD:$PWD pactfoundation/pact-cli:latest
+          publish $PWD/pacts 
+          --consumer-app-version ${{ github.sha }} 
+          --tag ${APP_ENVIRONMENT}
+          --broker-base-url $PACT_BROKER_BASE_URL
+          --broker-token $PACT_BROKER_TOKEN
 
   can-i-deploy:
     runs-on: ubuntu-latest
     needs: test
     steps:
       - uses: actions/checkout@v2
-      - run: docker pull pactfoundation/pact-cli:latest
+      - name: Setup pact-cli
+        run: docker pull pactfoundation/pact-cli:latest
       - name: Can I deploy?
-        run: DEPLOY_TARGET=dev make can_i_deploy
-        env:
-          PACTICIPANT: person-consumer
+        run: >
+          docker run pactfoundation/pact-cli:latest
+          broker can-i-deploy
+          --pacticipant $PACTICIPANT 
+          --version ${{ github.sha }}
+          --to $APP_ENVIRONMENT
+          --retry-while-unknown 0 
+          --retry-interval 10
+          --broker-base-url $PACT_BROKER_BASE_URL
+          --broker-token $PACT_BROKER_TOKEN
 
   release:
     name: Release
@@ -54,4 +73,4 @@ jobs:
       - name: Serverless AWS authentication
         run: yarn serverless config credentials --provider aws --key ${{ secrets.AWS_KEY }} --secret ${{ secrets.AWS_SECRET }}
       - name: Serveless deploy
-        run: yarn serverless deploy --stage dev
+        run: yarn serverless deploy --stage $APP_ENVIRONMENT
