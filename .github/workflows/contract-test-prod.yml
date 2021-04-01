@@ -11,7 +11,7 @@ env:
   PACT_BROKER_BASE_URL: ${{secrets.PACT_BROKER_BASE_URL}}
   PACT_BROKER_TOKEN: ${{secrets.PACT_BROKER_TOKEN}}
   PACTICIPANT: person-consumer
-  APP_ENVIRONMENT: master
+  APP_ENVIRONMENT: prod
 
 jobs:
   test:
