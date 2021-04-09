@@ -1,5 +1,7 @@
 name: can-i-deploy-action
 
+description: Check if it is safe to deploy
+
 runs:
   using: "composite"
   steps:
