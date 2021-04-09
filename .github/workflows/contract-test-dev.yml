@@ -1,17 +1,13 @@
-name: contract-test-dev
+name: contract-test
 
 on:
   pull_request:
     types: [opened, synchronize]
-    branches:
-      - dev
-  workflow_dispatch:
 
 env:
   PACT_BROKER_BASE_URL: ${{secrets.PACT_BROKER_BASE_URL}}
   PACT_BROKER_TOKEN: ${{secrets.PACT_BROKER_TOKEN}}
   PACTICIPANT: person-consumer
-  APP_ENVIRONMENT: dev
 
 jobs:
   test:
@@ -27,16 +23,13 @@ jobs:
         run: yarn install --frozen-lockfile
       - name: Test
         run: yarn test
-      - name: Setup pact-cli
-        run: docker pull pactfoundation/pact-cli:latest
-      - name: Publish Pact
+      - name: Publish contract
         run: >
-          docker run --rm  -v $PWD:$PWD pactfoundation/pact-cli:latest
-          publish $PWD/pacts 
-          --consumer-app-version ${{ github.sha }} 
-          --tag ${APP_ENVIRONMENT}
-          --broker-base-url $PACT_BROKER_BASE_URL
-          --broker-token $PACT_BROKER_TOKEN
+          yarn pact-broker publish pacts 
+          -b $PACT_BROKER_BASE_URL 
+          -k $PACT_BROKER_TOKEN 
+          -a ${{ github.sha }} 
+          -t ${{ github.ref }}
 
   can-i-deploy:
     runs-on: ubuntu-latest
@@ -45,14 +38,7 @@ jobs:
       - uses: actions/checkout@v2
       - name: Setup pact-cli
         run: docker pull pactfoundation/pact-cli:latest
-      - name: Can I deploy?
-        run: >
-          docker run pactfoundation/pact-cli:latest
-          broker can-i-deploy
-          --pacticipant $PACTICIPANT 
-          --version ${{ github.sha }}
-          --to $APP_ENVIRONMENT
-          --retry-while-unknown 0 
-          --retry-interval 10
-          --broker-base-url $PACT_BROKER_BASE_URL
-          --broker-token $PACT_BROKER_TOKEN
+      - uses: ./.github/actions/can-i-deploy
+        with:
+          PACT_BROKER_BASE_URL: $PACT_BROKER_BASE_URL
+          PACT_BROKER_TOKEN: $PACT_BROKER_TOKEN
