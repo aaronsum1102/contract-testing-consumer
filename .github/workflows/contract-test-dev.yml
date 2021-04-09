@@ -35,9 +35,4 @@ jobs:
     runs-on: ubuntu-latest
     needs: test
     steps:
-      - name: Setup pact-cli
-        run: docker pull pactfoundation/pact-cli:latest
       - uses: ./.github/actions/can-i-deploy-action
-        with:
-          PACT_BROKER_BASE_URL: $PACT_BROKER_BASE_URL
-          PACT_BROKER_TOKEN: $PACT_BROKER_TOKEN
