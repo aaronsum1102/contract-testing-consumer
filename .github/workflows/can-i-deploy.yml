@@ -1,0 +1,20 @@
+name: can-i-deploy
+
+on: workflow_dispatch
+
+env:
+  PACT_BROKER_BASE_URL: ${{secrets.PACT_BROKER_BASE_URL}}
+  PACT_BROKER_TOKEN: ${{secrets.PACT_BROKER_TOKEN}}
+  PACTICIPANT: person-consumer
+
+jobs:
+  can-i-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup pact-cli
+        run: docker pull pactfoundation/pact-cli:latest
+      - uses: ./.github/actions/can-i-deploy
+        with:
+          PACT_BROKER_BASE_URL: $PACT_BROKER_BASE_URL
+          PACT_BROKER_TOKEN: $PACT_BROKER_TOKEN
