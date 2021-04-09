@@ -12,9 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Setup pact-cli
-        run: docker pull pactfoundation/pact-cli:latest
-      - uses: ./.github/actions/can-i-deploy
+      - uses: ./.github/actions/can-i-deploy-action
         with:
           PACT_BROKER_BASE_URL: $PACT_BROKER_BASE_URL
           PACT_BROKER_TOKEN: $PACT_BROKER_TOKEN

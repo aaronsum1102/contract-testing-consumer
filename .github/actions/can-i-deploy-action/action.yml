@@ -1,9 +1,11 @@
-name: can-i-deploy
+name: can-i-deploy-action
 
 inputs:
   PACT_BROKER_BASE_URL:
+    description: "Pact broker url"
     required: true
   PACT_BROKER_TOKEN:
+    description: "Pact broker token"
     required: true
 
 runs:
@@ -11,6 +13,7 @@ runs:
   steps:
     - name: Setup pact-cli
       run: docker pull pactfoundation/pact-cli:latest
+      shell: bash
     - name: Can I deploy?
       run: >
         docker run pactfoundation/pact-cli:latest
@@ -22,3 +25,4 @@ runs:
         --retry-interval 10
         --broker-base-url ${{ inputs.PACT_BROKER_BASE_URL }}
         --broker-token ${{ inputs.PACT_BROKER_TOKEN }}
+      shell: bash
