@@ -29,7 +29,7 @@ jobs:
           -b $PACT_BROKER_BASE_URL 
           -k $PACT_BROKER_TOKEN 
           -a ${{ github.sha }} 
-          -t $GITHUB_BASE_REF
+          -t $GITHUB_HEAD_REF
 
   can-i-deploy:
     runs-on: ubuntu-latest
