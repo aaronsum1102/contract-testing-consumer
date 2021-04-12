@@ -3,6 +3,7 @@ import lambdaLog from "lambda-log";
 interface Person {
   firstName: string;
   lastName: string;
+  age: number;
 }
 
 export const processEvent = (data: Person): Person => {
