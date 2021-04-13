@@ -3,6 +3,7 @@ import lambdaLog from "lambda-log";
 interface Person {
   firstName: string;
   lastName: string;
+  fullName: string;
   age: number;
 }
 

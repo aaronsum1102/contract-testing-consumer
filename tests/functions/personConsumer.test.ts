@@ -22,6 +22,7 @@ describe("Consumer event handler test", () => {
         .withContent({
           firstName: like("Test"),
           lastName: like("Testsson"),
+          fullName: like("Test Testsson"),
           age: like(21),
         })
         .withMetadata({
