@@ -3,7 +3,7 @@ import {
   MessageConsumerPact,
   synchronousBodyHandler,
 } from "@pact-foundation/pact";
-import { like } from "@pact-foundation/pact/src/dsl/matchers";
+import { like, email } from "@pact-foundation/pact/src/dsl/matchers";
 import path from "path";
 
 describe("Consumer event handler test", () => {
@@ -23,6 +23,7 @@ describe("Consumer event handler test", () => {
           firstName: like("Test"),
           lastName: like("Testsson"),
           age: like(21),
+          email: email("test.testsson@test.com"),
         })
         .withMetadata({
           "content-type": "application/json",
