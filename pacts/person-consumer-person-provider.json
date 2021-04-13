@@ -20,10 +20,6 @@
           "contents": "Testsson",
           "json_class": "Pact::SomethingLike"
         },
-        "fullName": {
-          "contents": "Test Testsson",
-          "json_class": "Pact::SomethingLike"
-        },
         "age": {
           "contents": 21,
           "json_class": "Pact::SomethingLike"
