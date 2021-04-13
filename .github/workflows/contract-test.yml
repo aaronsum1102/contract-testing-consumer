@@ -8,6 +8,8 @@ env:
   PACT_BROKER_BASE_URL: ${{secrets.PACT_BROKER_BASE_URL}}
   PACT_BROKER_TOKEN: ${{secrets.PACT_BROKER_TOKEN}}
   PACTICIPANT: person-consumer
+  CI_VERSION: ${{ github.event.pull_request.head.sha }}
+  DEPLOY_TARGET: ${{ github.base_ref }}
 
 jobs:
   test:
@@ -28,7 +30,7 @@ jobs:
           yarn pact-broker publish pacts 
           -b $PACT_BROKER_BASE_URL 
           -k $PACT_BROKER_TOKEN 
-          -a ${{ github.event.pull_request.head.sha }} 
+          -a $CI_VERSION
           -t $GITHUB_HEAD_REF
 
   can-i-deploy:

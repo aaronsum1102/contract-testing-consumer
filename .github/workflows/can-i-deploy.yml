@@ -6,6 +6,8 @@ env:
   PACT_BROKER_BASE_URL: ${{secrets.PACT_BROKER_BASE_URL}}
   PACT_BROKER_TOKEN: ${{secrets.PACT_BROKER_TOKEN}}
   PACTICIPANT: person-consumer
+  CI_VERSION: ${{ github.event.pull_request.head.sha }}
+  DEPLOY_TARGET: ${{ github.base_ref }}
 
 jobs:
   can-i-deploy:

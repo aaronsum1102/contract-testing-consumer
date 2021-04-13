@@ -13,8 +13,8 @@ runs:
         docker run pactfoundation/pact-cli:latest
         broker can-i-deploy
         --pacticipant $PACTICIPANT 
-        --version ${{ github.sha }}
-        --to ${{ github.base_ref }}
+        --version $CI_VERSION
+        --to $DEPLOY_TARGET
         --retry-while-unknown 3
         --retry-interval 30
         --broker-base-url $PACT_BROKER_BASE_URL
