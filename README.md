@@ -1,4 +1,4 @@
-# contract-test-provider
+# contract-test-consumer
 
 This is an POC for demostrate the use of Pact and Pact Broker for contract testing of asynchronous api.
 
