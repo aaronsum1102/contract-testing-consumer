@@ -15,7 +15,7 @@ runs:
       run: >
         yarn pact-broker can-i-deploy 
         -a person-consumer 
-        -e ${{ github.sha }} 
+        -e ${{ github.event.before }} 
         --to ${{ inputs.stage }} 
         --retry-while-unknown 3 
         --retry-interval 30
@@ -26,7 +26,7 @@ runs:
       run: >
         yarn pact-broker create-version-tag 
         --pacticipant person-consumer
-        --version ${{ github.sha }} 
+        --version ${{ github.event.before }} 
         --tag ${{ inputs.stage }}  
         --broker-base-url $PACT_BROKER_BASE_URL 
         --broker-token $PACT_BROKER_TOKEN
