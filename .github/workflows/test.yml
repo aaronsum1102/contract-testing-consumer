@@ -1,9 +1,6 @@
 name: test
 
-on:
-  push:
-    branches:
-      - "!master"
+on: push
 
 env:
   PACT_BROKER_BASE_URL: ${{secrets.PACT_BROKER_BASE_URL}}
@@ -12,6 +9,7 @@ env:
 jobs:
   test:
     runs-on: ubuntu-latest
+    if: ${{ github.ref != 'refs/heads/master' }}
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v1
