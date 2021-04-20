@@ -1,13 +1,16 @@
-name: test
+name: tag-contract
 
-on: push
+on:
+  pull_request:
+    types:
+      - closed
 
 env:
   PACT_BROKER_BASE_URL: ${{secrets.PACT_BROKER_BASE_URL}}
   PACT_BROKER_TOKEN: ${{secrets.PACT_BROKER_TOKEN}}
 
 jobs:
-  test:
+  tag-contract:
     runs-on: ubuntu-latest
     if: ${{ github.ref != 'refs/heads/master' }}
     steps:
@@ -25,22 +28,10 @@ jobs:
             ${{ runner.os }}-yarn-
       - name: Install dependencies
         run: yarn install --frozen-lockfile
-      - name: Test
-        run: yarn test --ci
-      - name: Publish contract
-        run: >
-          yarn pact-broker publish pacts 
-          -b $PACT_BROKER_BASE_URL 
-          -k $PACT_BROKER_TOKEN 
-          -a ${{ github.sha }} 
-          -t ${{ github.ref }}
-      - name: Can I deploy?
-        run: >
-          yarn pact-broker can-i-deploy 
-          -a person-consumer 
-          -e ${{ github.sha }} 
-          --to dev
-          --retry-while-unknown 3 
-          --retry-interval 30
-          -b $PACT_BROKER_BASE_URL 
-          -k $PACT_BROKER_TOKEN
+      - run: >
+          yarn pact-broker create-version-tag 
+          --pacticipant person-consumer
+          --version ${{ github.event.pull_request.head.sha }}
+          --tag dev
+          --broker-base-url $PACT_BROKER_BASE_URL 
+          --broker-token $PACT_BROKER_TOKEN
