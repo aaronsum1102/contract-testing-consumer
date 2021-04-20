@@ -54,7 +54,8 @@ jobs:
     steps:
       - uses: actions/checkout@v2
         with:
-          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 2
+      - run: git checkout HEAD^
       - uses: actions/setup-node@v1
       - name: Get yarn cache directory path
         id: yarn-cache-dir-path
@@ -81,7 +82,8 @@ jobs:
     steps:
       - uses: actions/checkout@v2
         with:
-          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 2
+      - run: git checkout HEAD^
       - uses: actions/setup-node@v1
       - name: Get yarn cache directory path
         id: yarn-cache-dir-path
@@ -108,7 +110,8 @@ jobs:
     steps:
       - uses: actions/checkout@v2
         with:
-          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 2
+      - run: git checkout HEAD^
       - uses: actions/setup-node@v1
       - name: Get yarn cache directory path
         id: yarn-cache-dir-path
