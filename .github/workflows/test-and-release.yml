@@ -1,6 +1,10 @@
 name: test-and-release
 
-on: push
+on:
+  push:
+  pull_request:
+    types:
+      - closed
 
 env:
   PACT_BROKER_BASE_URL: ${{secrets.PACT_BROKER_BASE_URL}}
@@ -44,6 +48,31 @@ jobs:
           --retry-interval 30
           -b $PACT_BROKER_BASE_URL 
           -k $PACT_BROKER_TOKEN
+  tag-contract:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+      - name: Get yarn cache directory path
+        id: yarn-cache-dir-path
+        run: echo "::set-output name=dir::$(yarn cache dir)"
+      - uses: actions/cache@v2
+        id: yarn-cache
+        with:
+          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+      - run: >
+          yarn pact-broker create-version-tag 
+          --pacticipant person-consumer
+          --version ${{ github.sha }} 
+          --tag dev  
+          --broker-base-url $PACT_BROKER_BASE_URL 
+          --broker-token $PACT_BROKER_TOKEN
 
   dev:
     if: ${{ github.ref == 'refs/heads/master' }}
@@ -53,9 +82,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-        with:
-          fetch-depth: 2
-      - run: git checkout HEAD^
       - uses: actions/setup-node@v1
       - name: Get yarn cache directory path
         id: yarn-cache-dir-path
@@ -81,9 +107,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-        with:
-          fetch-depth: 2
-      - run: git checkout HEAD^
       - uses: actions/setup-node@v1
       - name: Get yarn cache directory path
         id: yarn-cache-dir-path
@@ -109,9 +132,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-        with:
-          fetch-depth: 2
-      - run: git checkout HEAD^
       - uses: actions/setup-node@v1
       - name: Get yarn cache directory path
         id: yarn-cache-dir-path
