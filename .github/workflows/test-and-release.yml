@@ -39,6 +39,8 @@ jobs:
           -a person-consumer 
           -e ${{ github.sha }} 
           --to dev
+          --retry-while-unknown 3 
+          --retry-interval 30
           -b $PACT_BROKER_BASE_URL 
           -k $PACT_BROKER_TOKEN
 
