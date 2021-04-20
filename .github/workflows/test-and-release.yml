@@ -46,7 +46,6 @@ jobs:
           -k $PACT_BROKER_TOKEN
 
   dev:
-    needs: test
     if: ${{ github.ref == 'refs/heads/master' }}
     name: Deploy to dev
     environment:
