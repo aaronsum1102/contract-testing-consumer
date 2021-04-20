@@ -1,9 +1,6 @@
 name: test-and-release
 
-on:
-  pull_request:
-    types:
-      - closed
+on: push
 
 env:
   PACT_BROKER_BASE_URL: ${{secrets.PACT_BROKER_BASE_URL}}
