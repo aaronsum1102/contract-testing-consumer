@@ -31,7 +31,7 @@ jobs:
           yarn pact-broker publish pacts 
           -b $PACT_BROKER_BASE_URL 
           -k $PACT_BROKER_TOKEN 
-          -a $${{ github.sha }} 
+          -a ${{ github.sha }} 
           -t ${{ github.ref }}
       - name: Can I deploy?
         run: >
