@@ -53,6 +53,7 @@ jobs:
           -t ${{ github.ref }}
 
   can-i-deploy:
+    if: ${{ github.ref != 'refs/heads/master' }}
     needs: test
     runs-on: ubuntu-latest
     strategy:
