@@ -1,0 +1,10 @@
+{
+  "include": [
+    {
+      "pacticipant": "person-consumer"
+    },
+    {
+      "pacticipant": "contract-testing-save-order"
+    }
+  ]
+}
