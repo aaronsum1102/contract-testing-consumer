@@ -19,7 +19,7 @@ jobs:
       - uses: actions/checkout@v2
       - id: set-matrix
         run: |
-          JSON="$(cat .github/pactipants.json)"
+          JSON="$(cat ./pacticipant-matrix.json)"
           JSON="${JSON//'%'/'%25'}"
           JSON="${JSON//$'\n'/'%0A'}"
           JSON="${JSON//$'\r'/'%0D'}"
