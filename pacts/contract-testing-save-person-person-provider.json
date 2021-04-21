@@ -1,0 +1,40 @@
+{
+  "consumer": {
+    "name": "contract-testing-save-person"
+  },
+  "provider": {
+    "name": "person-provider"
+  },
+  "messages": [
+    {
+      "description": "A valid order",
+      "providerStates": [
+
+      ],
+      "contents": {
+        "firstName": {
+          "contents": "Test",
+          "json_class": "Pact::SomethingLike"
+        },
+        "lastName": {
+          "contents": "Testsson",
+          "json_class": "Pact::SomethingLike"
+        },
+        "age": {
+          "contents": 21,
+          "json_class": "Pact::SomethingLike"
+        }
+      },
+      "matchingRules": {
+      },
+      "metaData": {
+        "content-type": "application/json"
+      }
+    }
+  ],
+  "metadata": {
+    "pactSpecification": {
+      "version": "3.0.0"
+    }
+  }
+}

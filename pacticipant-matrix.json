@@ -4,7 +4,7 @@
       "pacticipant": "person-consumer"
     },
     {
-      "pacticipant": "contract-testing-save-order"
+      "pacticipant": "contract-testing-save-person"
     }
   ]
 }

@@ -1,4 +1,4 @@
-import { saveOrder } from "../../src/functions/saveOrder";
+import { savePerson } from "../../src/functions/savePerson";
 import {
   MessageConsumerPact,
   synchronousBodyHandler,
@@ -8,27 +8,25 @@ import path from "path";
 
 describe("Consumer event handler test", () => {
   const messagePact = new MessageConsumerPact({
-    consumer: "contract-testing-save-order",
-    provider: "order-event-provider",
+    consumer: "contract-testing-save-person",
+    provider: "person-provider",
     dir: path.resolve(process.cwd(), "pacts"),
     logLevel: "info",
   });
 
-  it("Save valid order", async () => {
+  it("Save valid Person data", async () => {
     await expect(
       messagePact
         .expectsToReceive("A valid order")
         .withContent({
-          order_id: like("12344"),
-          status: term({
-            generate: "pending",
-            matcher: "^(pending|delivery_planning)$",
-          }),
+          firstName: like("Test"),
+          lastName: like("Testsson"),
+          age: like(21),
         })
         .withMetadata({
           "content-type": "application/json",
         })
-        .verify(synchronousBodyHandler(saveOrder))
+        .verify(synchronousBodyHandler(savePerson))
     ).resolves.not.toThrow();
   });
 });
