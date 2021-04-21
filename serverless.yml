@@ -40,3 +40,10 @@ functions:
     name: ${self:service}-${self:provider.stage}-personConsumer
     events:
       - sns: ${self:app}-${self:provider.stage}-personTopic
+
+  saveOrder:
+    handler: src/functions/saveOrder.handler
+    events:
+      - sqs:
+          arn:
+            Fn::ImportValue: pact-provider-${self:provider.stage}-orderQueueARN
