@@ -19,7 +19,7 @@ jobs:
       - uses: actions/checkout@v2
       - id: set-matrix
         run: |
-          JSON=$(jq -c . < .github/pactipants.json)
+          JSON=$(jq -c . < ./pacticipant-matrix.json)
           echo $JSON
           echo "::set-output name=matrix::$JSON"
 
