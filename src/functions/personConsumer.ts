@@ -5,6 +5,7 @@ interface Person {
   lastName: string;
   fullName: string;
   age: number;
+  email: string;
 }
 
 export const processEvent = (data: Person): Person => {
