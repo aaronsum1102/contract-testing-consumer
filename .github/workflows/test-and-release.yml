@@ -20,8 +20,10 @@ jobs:
       - id: set-matrix
         run: |
           JSON=$(jq -c . < ./pacticipant-matrix.json)
-          echo ${{ toJSON(github) }}
+          echo $GITHUB_CONTEXT
           echo "::set-output name=matrix::$JSON"
+        env:
+          GITHUB_CONTEXT: ${{ toJSON(github) }}
 
   test:
     if: ${{ github.event.pull_request.state != 'closed'}}
