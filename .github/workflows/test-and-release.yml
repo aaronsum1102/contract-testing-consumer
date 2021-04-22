@@ -20,11 +20,10 @@ jobs:
       - id: set-matrix
         run: |
           JSON=$(jq -c . < ./pacticipant-matrix.json)
-          echo $JSON
+          echo ${{ toJSON(github) }}
           echo "::set-output name=matrix::$JSON"
 
   test:
-    needs: setup-matrix
     if: ${{ github.event.pull_request.state != 'closed'}}
     runs-on: ubuntu-latest
     steps:
@@ -54,7 +53,7 @@ jobs:
 
   can-i-deploy:
     if: ${{ github.ref != 'refs/heads/master' }}
-    needs: test
+    needs: [setup-matrix, test]
     runs-on: ubuntu-latest
     strategy:
       matrix: ${{fromJSON(needs.setup-matrix.outputs.matrix)}}
@@ -108,7 +107,7 @@ jobs:
           pacticipant: ${{ matrix.pacticipant }}
 
   dev:
-    needs: test
+    needs: [setup-matrix, test]
     if: ${{ github.ref == 'refs/heads/master' }}
     name: Deploy to dev
     environment:
@@ -138,7 +137,7 @@ jobs:
           pacticipant: ${{ matrix.pacticipant }}
 
   staging:
-    needs: dev
+    needs: [setup-matrix, dev]
     name: Deploy to staging
     environment:
       name: staging
@@ -167,7 +166,7 @@ jobs:
           pacticipant: ${{ matrix.pacticipant }}
 
   prod:
-    needs: staging
+    needs: [setup-matrix, staging]
     name: Deploy to prod
     environment:
       name: production
