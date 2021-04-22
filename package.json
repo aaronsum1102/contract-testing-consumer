@@ -26,6 +26,7 @@
     "@babel/preset-env": "^7.13.12",
     "@babel/preset-typescript": "^7.13.0",
     "@pact-foundation/pact": "^9.15.3",
+    "@types/aws-lambda": "^8.10.75",
     "@types/jest": "^26.0.22",
     "@types/lambda-log": "^2.2.0",
     "@typescript-eslint/eslint-plugin": "^4.19.0",
