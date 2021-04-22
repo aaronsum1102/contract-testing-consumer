@@ -40,3 +40,9 @@ functions:
     name: ${self:service}-${self:provider.stage}-personConsumer
     events:
       - sns: ${self:app}-${self:provider.stage}-personTopic
+
+  savePerson:
+    handler: src/functions/savePerson.handler
+    name: ${self:service}-${self:provider.stage}-savePerson
+    events:
+      - sns: ${self:app}-${self:provider.stage}-personTopic
