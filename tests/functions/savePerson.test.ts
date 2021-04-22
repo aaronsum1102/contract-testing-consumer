@@ -3,13 +3,14 @@ import {
   MessageConsumerPact,
   synchronousBodyHandler,
 } from "@pact-foundation/pact";
-import { like, term } from "@pact-foundation/pact/src/dsl/matchers";
+import { like } from "@pact-foundation/pact/src/dsl/matchers";
 import path from "path";
 
 describe("Consumer event handler test", () => {
   const messagePact = new MessageConsumerPact({
     consumer: "contract-testing-save-person",
     provider: "person-provider",
+    pactfileWriteMode: "update",
     dir: path.resolve(process.cwd(), "pacts"),
     logLevel: "info",
   });
