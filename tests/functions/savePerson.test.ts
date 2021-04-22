@@ -17,7 +17,7 @@ describe("Consumer event handler test", () => {
   it("Save valid Person data", async () => {
     await expect(
       messagePact
-        .expectsToReceive("A valid order")
+        .expectsToReceive("A request for person")
         .withContent({
           firstName: like("Test"),
           lastName: like("Testsson"),
